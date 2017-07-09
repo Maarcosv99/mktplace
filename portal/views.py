@@ -1,4 +1,5 @@
-from django.shortcuts import render, render_to_response, redirect
+from django.http import HttpResponseForbidden
+from django.shortcuts import render, render_to_response, redirect, get_object_or_404
 
 # Create your views here.
 from portal.forms import ProductForm
@@ -41,3 +42,32 @@ def product_new(request):
         'form':form,
     }
     return render(request, 'portal/product_new.html', context)
+
+def product_edit(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+
+    if product.user != request.user:
+        return HttpResponseForbidden
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            product.name = form.cleaned_data['name']
+            product.quantity = form.cleaned_data['quantity']
+            product.price = form.cleaned_data['price']
+            product.short_description = form.cleaned_data['short_description']
+            product.description = form.cleaned_data['description']
+            product.categories = form.cleaned_data['categories']
+            product.status = form.cleaned_data['status']
+
+            product.save()
+            return redirect('my_products')
+
+    form = ProductForm(instance=product)
+
+    context = {
+        'product': product,
+        'form': form,
+    }
+
+    return render(request, 'portal/product_edit.html', context)

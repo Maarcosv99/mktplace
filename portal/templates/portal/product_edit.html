@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar anuncio - MarketPlace{% endblock %}
+
+{%  block content %}
+    <h3>Editando: {{ product.name }}</h3>
+    <br>
+    <form action="{% url 'product_edit' product.id %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Salvar</button>
+    </form>
+{%  endblock %}

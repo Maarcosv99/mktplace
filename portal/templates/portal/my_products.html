@@ -5,7 +5,7 @@
 {%  block content %}
 <h3>Meus Anúncios</h3>
 <br>
-<p><a href="#">Novo Anúncio</a></p>
+<p><a href="{% url 'product_new' %}">Novo Anúncio</a></p>
 
     <table class="table table-bordered">
         <tr>
@@ -19,7 +19,7 @@
                 <td>{{ product.id }}</td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.status }}</td>
-                <td>Editar</td>
+                <td><a href="{% url 'product_edit' product.id %}">Editar</a></td>
             </tr>
         {% endfor %}
     </table>
